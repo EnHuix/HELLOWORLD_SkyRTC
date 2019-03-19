@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block main %}
+<section id="getintouch" class="bounceIn animated">
+<div class="container">
+    
+    <!-- <center><h1>注册</h1></center> -->
+    <h1>
+        <span>注册</span>
+    </h1>    
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> Please Register</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="/register" method="post">
+                        <div class="form-group">
+                            <label>UserName</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="UserName" value="{{ username }}">
+                            <span id="messageUserName" class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password" value="{{ password }}">
+                        </div>
+                        <div class="form-group">
+                            <label>NickName</label>
+                            <input type="text" name="nickname" class="form-control" placeholder="NickName" value="{{ nickname }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Birth</label>
+                            <input type="date"  class="form-control" name="birth" placeholder="Birth" value="{{ birth }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=1 > <span class="fa fa-mars"></span></label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=0> <span class="fa fa-venus"></span></label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=-1> Keep Secret</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Language You Good At</label>
+                            <div>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="zh"> Chinese</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="en"> English</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="fr"> French</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Language 想学的</label>
+                            <div>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="zh"> Chinese</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="en"> English</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="fr"> French</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Introduce Yourself:</label>
+                            <textarea class="form-control" rows="3" style="resize: none;" name="introduction" placeholder="Your background, interests, etc." value="{{ introduction }}"></textarea>
+                        </div>
+
+                        <center><button type="submit" class="btn btn-primary" onclick="alert('注册成功')">保存信息</button></center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+</section>
+
+
+
+<script>
+//检测用户名是否可用
+$(function(){
+    $("#username").change(function(){
+        var val=$(this).val();
+        val=$.trim(val);
+        if(val.length<6){
+            $('#messageUserName').text("*用户名长度应大于6");
+            $('#messageUserName').css('color', '#CD5C5C')
+            return;
+        }
+            
+        if(val !=""){
+            $.ajax({
+                type: 'POST',
+                url: '/checkRegister',
+                dataType: 'json',
+                data: {
+                    username:val
+                }
+            })
+        }
+    
+    });
+});
+$(document).ajaxComplete(function(event, xhr, settings) {
+    var obj = JSON.parse(xhr.responseText);
+    var data = obj.data;
+    if(obj.success){
+        $('#messageUserName').css('color', '#228B22')
+    } else {
+        $('#messageUserName').css('color', '#CD5C5C')
+    }
+    $('#messageUserName').text(data);
+});
+</script>
+{% endblock %}
