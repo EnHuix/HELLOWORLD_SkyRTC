@@ -1,10 +1,64 @@
 {% extends "base.html" %} {% block main %}
+<script>
+function addToUserList(list, user) {
+    var i;
+    for (i=0; i<list.length; i++) {
+        if (list[i].id === user.id) {
+            return;
+        }
+    }
+    list.push(user);
+}
+
+function removeFromUserList(list, user) {
+    var i, target = -1;
+    for (i=0; i<list.length; i++) {
+        if (list[i].id === user.id) {
+            target = i;
+            break;
+        }
+    }
+    if (target >= 0) {
+        list.splice(target, 1);
+    }
+}
+</script>
+
 <center>
 <h1>这里是主页</h1>
 <p>在这个页面加各种UI</p>
 <button type="button" class="btn btn-info" onclick="location.href='/enterRoom'">点击这里进入聊天室（聊天demo）</button>
-</center>>
+</center>
+<div class="container" style="position:fixed;left:0%;padding: 0px">
 
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Users</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="height:434px; overflow-x:hidden; overflow-y:scroll;">
+                        <div id="user-list">
+                            <div class="media" v-for="user in users">
+                                <div class="media-left">
+                                    <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + user.image + '.png'">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading" v-text="user.name + ' (' + user.id + ')'"></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <audio id="recorded" preload="none"></audio>
+        <!-- <button type="button" class="btn btn-info" onclick="location.href='/test'">test</button> -->
+    </div>
+        
+</div>
 
 
 {% endblock %}

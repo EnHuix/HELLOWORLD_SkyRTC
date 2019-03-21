@@ -113,7 +113,6 @@ function createWebSocketServer(server, onConnection, onMessage, onAudio, onClose
         ws.on('close', onClose);
         ws.on('error', onError);
 
-        ws.on('audio', onAudio);
         
         if (location.pathname !== '/ws/chat') {
             // close ws:
@@ -163,13 +162,7 @@ function onMessage(message) {
     }
 }
 
-function onAudio(message) {
-    console.log(message);
-    if (message && message.trim()) {
-        let msg = createMessage('audio', this.user, message.trim());
-        this.wss.broadcast(msg);
-    }
-}
+
 
 
 function onClose() {
