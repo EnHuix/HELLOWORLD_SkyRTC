@@ -139,6 +139,11 @@ var SkyRTC = function() {
             that.emit('connected', socket,data.you,data.user,users);
         });
 
+        this.on('_get_room',function(data){
+            // console.log("技术文件：",data.room_name);
+            that.emit('get_roomname',data.room_name);
+        });
+
         this.on("_ice_candidate", function(data) {
             var candidate = new nativeRTCIceCandidate(data);
             var pc = that.peerConnections[data.socketId];
