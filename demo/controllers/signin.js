@@ -46,18 +46,7 @@ module.exports = {
     },
 
     'POST /signin': async (ctx, next) => {
-        // index ++;
-        // let name = ctx.request.body.name || '路人甲';
-        // let user = {
-        //     id: index,
-        //     name: name,
-        //     image: index % 10
-        // };
-        // let value = Buffer.from(JSON.stringify(user)).toString('base64');
-        // console.log(`Set cookie value: ${value}`);
-        // ctx.cookies.set('name', value);
-        // ctx.response.redirect('/');
-       
+              
         var success=await haveUser(ctx,next);
         //查询成功后登入首页，设置cookies和user对象信息
         index ++;
@@ -74,6 +63,7 @@ module.exports = {
         if(success){
             ctx.render('homepage.html',{
                     title:"首页"
+                    // user:user
             });
         }else{
             ctx.render('signin-failed.html',{

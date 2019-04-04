@@ -1,5 +1,9 @@
 const url = require('url');
 
+const { default: enforceHttps } = require('koa-sslify');
+
+
+var https = require('https');
 //导入WebSocket模块
 const ws = require('ws');
 
@@ -9,16 +13,27 @@ const Koa = require('koa');
 
 const bodyParser = require('koa-bodyparser');
 
+var https = require('https')
+    ,fs = require("fs");
+
+var options = {
+    key: fs.readFileSync('./keys/privatekey.pem'),
+    cert: fs.readFileSync('./keys/certificate.pem')
+};
+
+
 
 //引入controller.js的export，用来获得路由信息
 const controller = require('./controller');
 //引入templating.js的export，用来获得模板信息
 const templating = require('./templating');
-//引用server类
-const WebSocketServer = ws.Server;
 
 //初始化项目实例
 const app = new Koa();
+// Force HTTPS on all page
+app.use(enforceHttps({
+    port: 3001
+  }));
 
 //以下是middleware
 //多个middleware组成一个处理链
@@ -32,6 +47,7 @@ app.use(async (ctx, next) => {
 // 处理cookie设置的name（在signin.js种设置）
 app.use(async (ctx, next) => {
     ctx.state.user = parseUser(ctx.cookies.get('name') || '');
+    users=ctx.state.user;
     await next();
 });
 
@@ -53,13 +69,61 @@ app.use(templating('views', {
 // 添加 controller middleware:
 app.use(controller());
 
-let server = app.listen(3000);
+
+// First HTTP server is listening on port 3000 and redirects to second one
+// Second HTTPS server is listening on port 3001
+//运行的时候直接输入localhost:3000就可以重定向到https下
+require('http').createServer(app.callback()).listen(3000);
+let server=https.createServer(options, app.callback()).listen(3001);
+var SkyRTC = require('skyrtc').listen(server);
+
+
+
+SkyRTC.rtc.on('new_connect', function(socket,socketId) {
+  
+    console.log('创建新连接');
+});
+
+
+SkyRTC.rtc.on('remove_peer', function(socketId) {
+    console.log(socketId + "用户离开");
+});
+
+SkyRTC.rtc.on('new_peer', function(socket, room) {
+   // socket.user=user;
+    console.log("新用户" + socket.id + "加入房间" + room);
+   
+    
+});
+
+SkyRTC.rtc.on('socket_message', function(socket, msg) {
+    console.log("接收到来自" + socket.id + "的新消息：" + msg);
+});
+
+SkyRTC.rtc.on('ice_candidate', function(socket, ice_candidate) {
+	console.log("接收到来自" + socket.id + "的ICE Candidate");
+});
+
+SkyRTC.rtc.on('offer', function(socket, offer) {
+    
+	console.log("接收到来自" + socket.id + "的Offer");
+});
+
+SkyRTC.rtc.on('answer', function(socket, answer) {
+	console.log("接收到来自" + socket.id + "的Answer");
+});
+
+SkyRTC.rtc.on('error', function(error) {
+	console.log("发生错误：" + error.message);
+});
+
+console.log('app started at port 3000...');
 
 function parseUser(obj) {
     if (!obj) {
         return;
     }
-    console.log('try parse: ' + obj);
+    // console.log('try parse: ' + obj);
     let s = '';
     if (typeof obj === 'string') {
         s = obj;
@@ -70,107 +134,10 @@ function parseUser(obj) {
     if (s) {
         try {
             let user = JSON.parse(Buffer.from(s, 'base64').toString());
-            console.log(`User: ${user.name}, ID: ${user.id}`);
+            // console.log(`User: ${user.name}, ID: ${user.id}`);
             return user;
         } catch (e) {
             // ignore
         }
     }
 }
-
-function createWebSocketServer(server, onConnection, onMessage, onAudio, onClose, onError) {
-    let wss = new WebSocketServer({
-        server: server
-    });
-    wss.broadcast = function broadcast(data) {
-        wss.clients.forEach(function each(client) {
-            client.send(data);
-        });
-    };
-    onConnection = onConnection || function () {
-        console.log('[WebSocket] connected.');
-    };
-    onMessage = onMessage || function (msg) {
-        console.log('[WebSocket] message received: ' + msg);
-    };
-
-    onAudio = onAudio || function (msg){
-        console.log('[WebSocket] message received: ' + msg);
-    };
-
-    onClose = onClose || function (code, message) {
-        console.log(`[WebSocket] closed: ${code} - ${message}`);
-    };
-    onError = onError || function (err) {
-        console.log('[WebSocket] error: ' + err);
-    };
-
-    //wss对象响应connection事件来处理这个websocket
-    wss.on('connection', function (ws) {
-        let location = url.parse(ws.upgradeReq.url, true);
-        console.log('[WebSocketServer] connection: ' + location.href);
-        ws.on('message', onMessage);
-        ws.on('close', onClose);
-        ws.on('error', onError);
-
-        
-        if (location.pathname !== '/ws/chat') {
-            // close ws:
-            ws.close(4000, 'Invalid URL');
-        }
-        // check user:
-        let user = parseUser(ws.upgradeReq);
-        if (!user) {
-            ws.close(4001, 'Invalid user');
-        }
-        ws.user = user;
-        ws.wss = wss;
-        onConnection.apply(ws);
-    });
-    console.log('WebSocketServer was attached.');
-    return wss;
-}
-
-var messageIndex = 0;
-//消息可以有多种类型，包括聊天的消息，还可以获取用户列表，用户加入、用户退出等消息。
-function createMessage(type, user, data) {
-    messageIndex ++;
-    return JSON.stringify({
-        id: messageIndex,
-        type: type,
-        user: user,
-        data: data
-    });
-}
-
-function onConnect() {
-    let user = this.user;
-    let msg = createMessage('join', user, `${user.name} joined.`);
-    this.wss.broadcast(msg);
-    // build user list:
-    let users = this.wss.clients.map(function (client) {
-        return client.user;
-    });
-    this.send(createMessage('list', user, users));
-}
-
-function onMessage(message) {
-    console.log(message);
-    if (message && message.trim()) {
-        let msg = createMessage('chat', this.user, message.trim());
-        this.wss.broadcast(msg);
-    }
-}
-
-
-
-
-function onClose() {
-    let user = this.user;
-    let msg = createMessage('left', user, `${user.name} is left.`);
-    this.wss.broadcast(msg);
-}
-
-app.wss = createWebSocketServer(server, onConnect, onMessage, onAudio,onClose);
-
-console.log('app started at port 3000...');
