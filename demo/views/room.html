@@ -1,14 +1,14 @@
 {% extends "base.html" %} {% block main %}
 
+
+<script type="text/javascript" src="static/js/SkyRTC-client.js"></script>
+
 <script>
 
-
-
-
-///////////
 function addToUserList(list, user) {
     var i;
     for (i=0; i<list.length; i++) {
+        console.log(user)
         if (list[i].id === user.id) {
             return;
         }
@@ -19,6 +19,7 @@ function addToUserList(list, user) {
 function removeFromUserList(list, user) {
     var i, target = -1;
     for (i=0; i<list.length; i++) {
+        
         if (list[i].id === user.id) {
             target = i;
             break;
@@ -50,39 +51,53 @@ $(function () {
         }
     });
 
-    var ws = new WebSocket('ws://localhost:3000/ws/chat');
 
-    ws.onmessage = function(event) {
-        var data = event.data;
+
+    var rtc = SkyRTC();
+
+    /**********************************************************/
+    //成功创建WebSocket连接
+    rtc.on("connected", function(socket) {
+        console.log(socket);
+        message=JSON.stringify({
+                type: 'chat',
+                user: socket.user,
+                data: socket.user.name+" joined"
+        });
+        var msg = JSON.parse(message);
+        addMessage(vmMessageList.messages, msg);
+    });
+ 
+
+    //删除其他用户
+    rtc.on('remove_peer', function(data) {
         console.log(data);
-        var msg = JSON.parse(data);
-        if (msg.type === 'list') {
-            vmUserList.users = msg.data;
-        } else if (msg.type === 'join') {
-            addToUserList(vmUserList.users, msg.user);
-            addMessage(vmMessageList.messages, msg);
-        } else if (msg.type === 'left') {
-            removeFromUserList(vmUserList.users, msg.user);
-            addMessage(vmMessageList.messages, msg);
-        } else if (msg.type === 'chat') {
-            addMessage(vmMessageList.messages, msg);
-        } else if(msg.type === 'audio'){
-            addMessage(vmMessageList.messages, msg);
+        console.log('删除');
+       // addMessage(vmMessageList.messages, msg);
+        var video = document.getElementById('other-' + socketId);
+        if(video){
+            video.parentNode.removeChild(video);
         }
-    };
+    });
+    //新用户加入
+    rtc.on("new_peer",function(message){
+        console.log(message);
+        //addToUserList(vmUserList.users, msg.user);
+    })
+    //接收到文字信息
+    rtc.on('data_channel_message', function(channel, socketId, message){
+               
 
-    ws.onclose = function (evt) {
-        console.log('[closed] ' + evt.code);
-        var input = $('#form-chat').find('input[type=text]');
-        input.attr('placeholder', 'WebSocket disconnected.');
-        input.attr('disabled', 'disabled');
-        $('#form-chat').find('button').attr('disabled', 'disabled');
-    };
-
-    ws.onerror = function (code, msg) {
-        console.log('[ERROR] ' + code + ': ' + msg);
-    };
-
+      //  console.log(channel,socketId,message);
+        message=JSON.stringify({
+            type: 'chat',
+           // user:  }},
+            data: message.trim()
+        });
+        var msg = JSON.parse(message);
+        addMessage(vmMessageList.messages, msg);
+        
+    });
     $('#form-chat').submit(function (e) {
         e.preventDefault();
         var input = $(this).find('input[type=text]');
@@ -90,24 +105,28 @@ $(function () {
         console.log('[chat] ' + text);
         if (text) {
             input.val('');
-            ws.send(text);
+           // ws.send(text);
+            rtc.broadcast(text);
+            message=JSON.stringify({
+                type: 'chat',
+                user: socket.user,
+                data: text.trim()
+            });
+            var msg = JSON.parse(message);
+            addMessage(vmMessageList.messages, msg);
         }
+
     });
 
-    $('#form-audio').submit(function (e) {
-        e.preventDefault();
-        var input = $(this).find('input[type=text]');
-        var text = input.val().trim();
-        console.log('[chat] ' + text);
-        if (text) {
-            input.val('');
-            ws.send(text);
-        }
-    });
+    //连接WebSocket服务器
+    rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
 
    
 });
 </script>
+ <div id="videos">
+    <video id="me" autoplay></video>
+</div>
 
 <div class="container">
     <div class="row">
@@ -122,7 +141,7 @@ $(function () {
                             <div style="margin-bottom:25px;" v-for="msg in messages">
                                 <div v-if="msg.type === 'join' || msg.type === 'left'">
                                     <div class="media-left">
-                                        <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + msg.user.image + '.png'">
+                                        <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + msg.user.image  + '.png'">
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading" v-text="msg.data"></h4>
@@ -140,18 +159,6 @@ $(function () {
                                     </div>
                                 </div>
 
-                                <div v-if="msg.type === 'audio'">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img class="media-object" style="width:48px; height:48px;" v-bind:src="'/static/images/' + msg.user.image + '.png'">
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="media-heading" v-text="msg.user.name"></h4>
-                                            <audio id="gum"><span v-text="msg.data"></span></audio>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -161,13 +168,6 @@ $(function () {
                                 <input type="text" class="form-control" placeholder="A good day, isn't it?">
                                 
                                 <span class="input-group-btn"><button class="btn btn-default" type="submit">Go</button></span>
-                            </div>
-                        </form>
-                        <form id="form-audio" action="#0">
-                            <div class="input-group">
-                                <span class="input-group-btn"><button id="send" class="btn btn-default" type="submit">Send</button></span>
-                                <span class="input-group-btn"><button id="record" class="btn btn-default" type="submit">Start Recording</button></span>
-                                <span class="input-group-btn"><button id="play" class="btn btn-default" type="submit">Play</button></span>
                             </div>
                         </form>
                     </div>
@@ -195,9 +195,7 @@ $(function () {
                 </div>
             </div>
         </div>
-        <audio id="recorded" preload="none"></audio>
-        <!-- <button type="button" class="btn btn-info" onclick="location.href='/test'">test</button> -->
     </div>    
 </div>
-<script src="/static/js/record.js"></script>
+<!-- <script src="/static/js/record.js"></script> -->
 {% endblock %}

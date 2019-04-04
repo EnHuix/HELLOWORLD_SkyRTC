@@ -1,0 +1,135 @@
+{% extends "base.html" %} {% block main %}
+<link rel="stylesheet" href="/static/css/match.css">
+
+<center>
+    <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">
+        <button type="button" class="btn btn-danger"  id="match_button">匹配测试</button>
+    </a>
+</center>
+<div id="light" class="white_content"> 
+        <!-- <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点这里关闭本窗口</a> -->
+        <div class="king">
+            <div class="player-layout">
+                <div class="group group1">
+                <div class="player1 player"></div>
+                </div>
+                <div class="group group2">
+                <div class="player2 player"></div>
+                </div>
+                <div class="center"><img src="static/images/1.png"></div>
+            </div>
+            <div class="matrix">
+                <div class="border border1"></div>
+                <div class="border border2"></div>
+            </div>
+            <div id="confirm_button"class="button" >
+                <div class="button-text">确认</div>
+            </div>
+            </div>
+        </div>
+</div> 
+<div id="fade" class="black_overlay"></div> 
+    
+<script type="text/javascript" src="static/js/SkyRTC-client.js"></script>
+<script>
+    // var videos = document.getElementById("videos");
+      
+    $(function () {
+        //用来存储信息，即自己的socket,socketId和个人信息socketUser，在匹配的时候发往后台，用作匹配
+        //my_socket用来发送消息给服务器
+        var my_socket;
+        var my_socketId;
+        var my_socketUser;
+        var videos = document.getElementById("videos");
+        //定义错误信息
+        var errorCb = function(rtc) {
+                return function(error) {
+                    if (error) {
+                        rtc.emit("error", error);
+                    }
+                };
+        };
+
+        $("#match_button").click(function(){
+            console.log(my_socket);
+            console.log(my_socketId)
+            console.log(my_socketUser)
+           //发往后台，加入匹配池
+            my_socket.send(JSON.stringify({
+				"eventName": "_match",
+				"data": {
+                    // "socket":my_socket,
+					"socketId": my_socketId,
+					"socketUser":my_socketUser
+				}
+            }), errorCb);
+            
+        })
+
+        $("#confirm_button").click(function(){
+            document.getElementById('light').style.display='none';
+            document.getElementById('fade').style.display='none'
+        })
+       
+        var rtc = SkyRTC();
+
+        /**********************************************************/
+        //成功创建WebSocket连接
+        rtc.on("connected", function(socket,socketId,socketUser,users) {
+            
+            rtc.createStream({
+                "video": false,
+                "audio": true
+            });
+            console.log("connected:",users)
+
+        });
+
+        //创建本地视频流成功
+        rtc.on("stream_created", function(stream) {
+            document.getElementById('me').srcObject = stream;
+            document.getElementById('me').play();
+        });
+         //创建本地视频流失败
+        // rtc.on("stream_create_error", function() {
+        //     alert("create stream failed!");
+        // });
+        //接收到其他用户的视频流
+        rtc.on('pc_add_stream', function(stream, socketId) {
+            var newVideo = document.createElement("video"),
+                id = "other-" + socketId;
+            newVideo.setAttribute("class", "other");
+            newVideo.setAttribute("autoplay", "autoplay");
+            newVideo.setAttribute("id", id);
+           
+            videos.appendChild(newVideo);
+
+            rtc.attachStream(stream, id);
+        });
+
+        //删除其他用户
+        rtc.on('remove_peer', function(socketId,socketUser) {
+            // console.log(socketId)
+            console.log("删除用户",socketUser)
+            var video = document.getElementById('other-' + socketId);
+            if(video){
+                video.parentNode.removeChild(video);
+            }
+
+        });
+        //新用户加入
+        rtc.on("new_peer",function(socketId,socketUser){
+            console.log(socketId);
+            console.log(socketUser)
+        })
+
+        //连接WebSocket服务器
+        rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+    });
+    </script>
+
+   <div id="videos">
+        <video id="me" autoplay></video>
+  </div>
+
+{% endblock %}

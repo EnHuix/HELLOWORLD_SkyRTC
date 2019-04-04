@@ -1,64 +1,128 @@
 {% extends "base.html" %} {% block main %}
-<script>
-function addToUserList(list, user) {
-    var i;
-    for (i=0; i<list.length; i++) {
-        if (list[i].id === user.id) {
-            return;
-        }
-    }
-    list.push(user);
-}
-
-function removeFromUserList(list, user) {
-    var i, target = -1;
-    for (i=0; i<list.length; i++) {
-        if (list[i].id === user.id) {
-            target = i;
-            break;
-        }
-    }
-    if (target >= 0) {
-        list.splice(target, 1);
-    }
-}
-</script>
+<link rel="stylesheet" href="/static/css/match.css">
 
 <center>
-<h1>这里是主页</h1>
-<p>在这个页面加各种UI</p>
-<button type="button" class="btn btn-info" onclick="location.href='/enterRoom'">点击这里进入聊天室（聊天demo）</button>
+    <h1>这里是主页</h1>
+    <p>在这个页面加各种UI</p>
+    <button type="button" class="btn btn-info" onclick="location.href='/enterRoom'">点击这里进入聊天室（聊天demo）</button>
+    <!-- <button type="button" class="btn btn-info" onclick="location.href='localhost:5001/index.html';target='_blank'" >点击这里进入语音（语音demo）</button> -->
+    <a href="/talk#match">
+        <button type="button" class="btn btn-info">点击这里进入语音（语音demo）</button>
+    </a>
+   
 </center>
-<div class="container" style="position:fixed;left:0%;padding: 0px">
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Users</h3>
-                </div>
-                <div class="panel-body">
-                    <div style="height:434px; overflow-x:hidden; overflow-y:scroll;">
-                        <div id="user-list">
-                            <div class="media" v-for="user in users">
-                                <div class="media-left">
-                                    <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + user.image + '.png'">
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading" v-text="user.name + ' (' + user.id + ')'"></h4>
+
+    
+<script type="text/javascript" src="static/js/SkyRTC-client.js"></script>   
+<script>
+    var videos = document.getElementById("videos");
+    function addToUserList(list, user) {
+        var i;
+        for (i=0; i<list.length; i++) {
+           
+            if (list[i].id === user.id) {
+                return;
+            }
+        }
+        list.push(user);
+    }
+    
+    function removeFromUserList(list, user) {
+        var i, target = -1;
+        for (i=0; i<list.length; i++) {
+            if (list[i].id == user.id) {
+                target = i;
+                break;
+            }
+        }
+        if (target >= 0) {
+           
+            list.splice(target, 1);
+        }
+    }
+   
+   
+    $(function () {    
+        
+        //定义一个VUE对象，用来存储当前在线用户
+        var vmUserList = new Vue({
+            el: '#user-list',
+            data: {
+                users: [],
+                socket_ids:[]
+            }
+        });
+       
+        var rtc = SkyRTC();
+
+        /**********************************************************/
+        //成功创建WebSocket连接
+        rtc.on("connected", function(socket,socketId,socketUser,users) {
+            // 初始化个人信息
+            my_socket=socket;
+            my_socketId=socketId;
+            my_socketUser=socketUser;
+
+            vmUserList.users = users;
+            console.log("connected:",users)
+
+        });
+
+        //删除其他用户
+        rtc.on('remove_peer', function(socketId,socketUser) {
+            // console.log(socketId)
+            console.log("删除用户",socketUser)
+            var video = document.getElementById('other-' + socketId);
+            if(video){
+                video.parentNode.removeChild(video);
+            }
+
+            removeFromUserList(vmUserList.users,socketUser)
+        });
+        //新用户加入
+        rtc.on("new_peer",function(socketId,socketUser){
+            console.log(socketId);
+            console.log(socketUser)
+            addToUserList(vmUserList.users, socketUser);
+        })
+
+        //连接WebSocket服务器
+        rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+    });
+    </script>
+
+     
+    <div class="container" style="position:fixed;left:0%;padding: 0px">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Users</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="height:434px; overflow-x:hidden; overflow-y:scroll;">
+                            <div id="user-list">
+                                <div class="media" v-for="user in users">
+                                    <div class="media-left">
+                                        <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + user.image + '.png'">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading" v-text="user.name + ' (' + user.id + ')'"></h4>
+                                        <!-- <h4 class="media-heading" v-text="user"></h4> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <audio id="recorded" preload="none"></audio>
-        <!-- <button type="button" class="btn btn-info" onclick="location.href='/test'">test</button> -->
+            <audio id="recorded" preload="none"></audio>
+            <!-- <button type="button" class="btn btn-info" onclick="location.href='/test'">test</button> -->
+        </div>    
     </div>
-        
-</div>
-
+    <div id="videos">
+        <video id="me" autoplay></video>
+    </div>
 
 {% endblock %}
