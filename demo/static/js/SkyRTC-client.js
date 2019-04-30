@@ -157,7 +157,7 @@ var SkyRTC = function() {
                 i, m;
             console.log(data.room)
            
-            "__default表示homepage，初始时都在首页，不创建流，在其他房间，如语音聊天才创建媒体流"
+            // "__default表示homepage，初始时都在首页，不创建流，在其他房间，如语音聊天才创建媒体流"
             if(data.room!="__default"){
                 pc.addStream(that.localMediaStream);
             }else{

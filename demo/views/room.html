@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block main %}
 
+<!-- 聊天室的html页 -->
 
 <script type="text/javascript" src="static/js/SkyRTC-client.js"></script>
 
@@ -106,7 +107,7 @@ $(function () {
         if (text) {
             input.val('');
            // ws.send(text);
-            rtc.broadcast(text);
+            rtc.broadcast(text);   
             message=JSON.stringify({
                 type: 'chat',
                 user: socket.user,
@@ -119,7 +120,7 @@ $(function () {
     });
 
     //连接WebSocket服务器
-    rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+    rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
 
    
 });
