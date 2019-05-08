@@ -1,35 +1,6 @@
 {% extends "base.html" %} {% block main %}
 <!-- 语音聊天的html页 -->
-<link rel="stylesheet" href="/static/css/match.css">
 
-<!-- <center>
-    <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">
-        <button type="button" class="btn btn-danger"  id="match_button">匹配测试</button>
-    </a>
-</center> -->
-<div id="light" class="white_content"> 
-        <!-- <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点这里关闭本窗口</a> -->
-        <div class="king">
-            <div class="player-layout">
-                <div class="group group1">
-                <div class="player1 player"></div>
-                </div>
-                <div class="group group2">
-                <div class="player2 player"></div>
-                </div>
-                <div class="center"><img src="static/images/1.png"></div>
-            </div>
-            <div class="matrix">
-                <div class="border border1"></div>
-                <div class="border border2"></div>
-            </div>
-            <div id="confirm_button"class="button" >
-                <div class="button-text">确认</div>
-            </div>
-            </div>
-        </div>
-</div> 
-<div id="fade" class="black_overlay"></div> 
     
 <script type="text/javascript" src="static/js/SkyRTC-client.js"></script>
 <script>
@@ -50,34 +21,6 @@
                     }
                 };
         };
-
-        // $("#match_button").click(function(){
-        //     console.log(my_socket);
-        //     console.log(my_socketId)
-        //     console.log(my_socketUser)
-
-        //    //发往后台，开始匹配
-        //     my_socket.send(JSON.stringify({
-		// 		"eventName": "_match",
-		// 		"data": {
-        //             // "socket":my_socket,
-		// 			"socketId": my_socketId,
-		// 			"socketUser":my_socketUser
-		// 		}
-        //     }), errorCb);
-
-        //     rtc.on("get_roomname",function(room_name){
-        //         console.log("到前端啦")
-        //         console.log(room_name);
-        //     })
-            
-        // })
-
-        // $("#confirm_button").click(function(){
-        //     document.getElementById('light').style.display='none';
-        //     document.getElementById('fade').style.display='none'
-        //     window.open("http://www.w3schools.com","_blank");
-        // })
        
         var rtc = SkyRTC();
 
