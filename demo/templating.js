@@ -1,4 +1,5 @@
 //集成Nunjucks的middleware
+//给ctx对象绑定render(view,model)的方法，controller可以调用该方法渲染模板
 const nunjucks = require('nunjucks');
 
 function createEnv(path, opts) {

@@ -1,4 +1,4 @@
-// scan all models defined in models:
+// 扫描所有定义的模型
 const fs = require('fs');
 const db = require('./db');
 
