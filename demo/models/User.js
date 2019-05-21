@@ -11,5 +11,6 @@ module.exports = db.defineModel('users', {
     gender: db.INTEGER,
     goodAtLanguage:db.STRING(100),
     studyLanguage:db.STRING(100),
-    introduction:db.STRING(255)
+    introduction:db.STRING(255),
+    image: db.INTEGER
 });

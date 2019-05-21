@@ -3,8 +3,9 @@
 const model = require('../model');
 let User=model.User;
 
-var index=0; //用来给用户赋予头像
+var index=0;  //用来判断是第几个连接到服务器的，便于判断
 var nickname; //用来存放用户的昵称
+var image; //用来存放用户头像索引
 
 
 //判断该用户是否合法（是否存在于数据库，并且用户名与密码匹配）
@@ -21,6 +22,7 @@ function haveUser(ctx,next){
             });
             if(user.length==1){
                 nickname=user[0].nickname;
+                image = user[0].image;
             }
             
             resolve(user.length);
@@ -77,7 +79,8 @@ function insertDataToUser(ctx,next){
             gender: ctx.request.body.gender,
             goodAtLanguage:goodAtLanguage,
             studyLanguage:studyLanguage,
-            introduction: ctx.request.body.introduction
+            introduction: ctx.request.body.introduction,
+            image: Math.ceil(Math.random()*900)
         });
         console.log('created: ' + JSON.stringify(user));
     })();
@@ -120,12 +123,12 @@ module.exports = {
               
         var success=await haveUser(ctx,next);
         //查询成功后登入首页，设置cookies和user对象信息
-        index ++;
+        index++;
         let name = nickname;
         let user = {
             id: index,
             name: name,
-            image: index % 10
+            image: image % 10
         };
         let value = Buffer.from(JSON.stringify(user)).toString('base64');
         console.log(`Set cookie value: ${value}`);
