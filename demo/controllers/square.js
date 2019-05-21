@@ -1,11 +1,13 @@
+//广场类
 const model = require('../model');
-let Blog=model.Bser;
+let moment=model.Moment;
 
 
 
 module.exports = {
 
-    'POST /refresh_blog': async (ctx, next) => {
+    //更新页面的moment
+    'POST /refresh_moment': async (ctx, next) => {
         let result = {};
         console.log(ctx.request.body.username);
 
