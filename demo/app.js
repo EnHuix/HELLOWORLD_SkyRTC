@@ -28,6 +28,8 @@ const controller = require('./controller');
 //引入templating.js的export，用来获得模板信息
 const templating = require('./templating');
 
+const rest = require('./rest');
+
 //初始化项目实例
 const app = new Koa();
 // Force HTTPS on all page
@@ -66,6 +68,8 @@ app.use(templating('views', {
     watch: true
 }));
 
+//为ctx添加rest()
+app.use(rest.restify());
 // 添加 controller middleware:
 app.use(controller());
 
