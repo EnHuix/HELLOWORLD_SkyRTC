@@ -50,7 +50,7 @@ $(function () {
                 var that = this;
                 var t = {
                     name: moment.name,
-                    description: moment.description
+                    content: moment.content
                 };
                 t[prop] = e.target.innerText;
                 if (t[prop] === moment[prop]) {
@@ -59,7 +59,7 @@ $(function () {
                 that.$resource('/moment/moments/' + moment.id).update(t).then(function (resp) {
                     resp.json().then(function (r) {
                         moment.name = r.name;
-                        moment.description = r.description;
+                        moment.content = r.content;
                     });
                 }, function (resp) {
                     e.target.innerText = moment[prop];
@@ -88,14 +88,14 @@ $(function () {
     var vmAdd = new Vue({
         el: '#vmAdd',
         data: {
-            name: '',
-            description: ''
+            // name: '',
+            content: ''
         },
         methods: {
             submit: function () {
                 vm.create(this.$data);
-                this.name = '';
-                this.description = '';
+                // this.name = '';
+                this.content = '';
             }
         }
     });
@@ -114,15 +114,15 @@ $(function () {
                     </div>
                     <div class="panel-body">
                         <form id="vmAdd" action="#0" v-on:submit.prevent="submit">
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                     <label>Name:</label>
                                     <input type="text" v-model="name" class="form-control" placeholder="Enter name">
-                            </div>
+                            </div> -->
                             <div class="form-group">
-                                <label>Description:</label>
-                                <input type="text" v-model="description" class="form-control" placeholder="Enter description">
+                                <label>Content:</label>
+                                <input type="text" v-model="content" class="form-control" placeholder="分享新鲜事">
                             </div>
-                            <button type="submit" class="btn btn-default">Add</button>
+                            <button type="submit" class="btn btn-default">发送</button>
                         </form>
                     </div>
                 </div>
@@ -138,7 +138,7 @@ $(function () {
                     <div id="vm">
                             <!-- <h3>{{ title }}</h3> -->
                             <p v-if="loading">Loading...</p>
-                            <ol>
+                            <!-- <ol>
                                 <li v-for="t in moments">
                                     <dl>
                                         <dt contenteditable="true" v-on:blur="update(t, 'name', $event)">{% raw %}{{ t.name }}{% endraw %}</dt>
@@ -146,7 +146,18 @@ $(function () {
                                         <dd><a href="#0" v-on:click="remove(t)">Delete</a></dd>
                                     </dl>
                                 </li>
-                            </ol>
+                            </ol> -->
+                            <div class="media" v-for="t in moments">
+                                <div class="media-left">
+                                    <img class="media-object" style="width:32px; height:32px;" v-bind:src="'/static/images/' + t.image + '.png'">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">{% raw %}{{ t.name }}{% endraw %}</h4>
+                                    <h5>{% raw %}{{ t.createdAt }}{% endraw %}</h5>
+                                    <span>{% raw %}{{ t.content }}{% endraw %}</span>
+                                </div>
+                                <br>
+                            </div>
                     </div>
                 </div>
             </div>

@@ -47,11 +47,11 @@ app.use(async (ctx, next) => {
 
 // parse user from cookie:
 // 处理cookie设置的name（在signin.js种设置）
-app.use(async (ctx, next) => {
-    ctx.state.user = parseUser(ctx.cookies.get('name') || '');
-    users=ctx.state.user;
-    await next();
-});
+// app.use(async (ctx, next) => {
+//     ctx.state.user = parseUser(ctx.cookies.get('name') || '');
+//     users=ctx.state.user;
+//     await next();
+// });
 
 // static file support:
 let staticFiles = require('./static-files');
@@ -123,25 +123,25 @@ SkyRTC.rtc.on('error', function(error) {
 
 console.log('app started at port 3000...');
 
-function parseUser(obj) {
-    if (!obj) {
-        return;
-    }
-    // console.log('try parse: ' + obj);
-    let s = '';
-    if (typeof obj === 'string') {
-        s = obj;
-    } else if (obj.headers) {
-        let cookies = new Cookies(obj, null);
-        s = cookies.get('name');
-    }
-    if (s) {
-        try {
-            let user = JSON.parse(Buffer.from(s, 'base64').toString());
-            // console.log(`User: ${user.name}, ID: ${user.id}`);
-            return user;
-        } catch (e) {
-            // ignore
-        }
-    }
-}
+// function parseUser(obj) {
+//     if (!obj) {
+//         return;
+//     }
+//     // console.log('try parse: ' + obj);
+//     let s = '';
+//     if (typeof obj === 'string') {
+//         s = obj;
+//     } else if (obj.headers) {
+//         let cookies = new Cookies(obj, null);
+//         s = cookies.get('name');
+//     }
+//     if (s) {
+//         try {
+//             let user = JSON.parse(Buffer.from(s, 'base64').toString());
+//             // console.log(`User: ${user.name}, ID: ${user.id}`);
+//             return user;
+//         } catch (e) {
+//             // ignore
+//         }
+//     }
+// }

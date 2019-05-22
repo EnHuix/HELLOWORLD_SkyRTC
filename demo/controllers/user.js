@@ -5,6 +5,7 @@ let User=model.User;
 
 var index=0;  //用来判断是第几个连接到服务器的，便于判断
 var nickname; //用来存放用户的昵称
+var username; //用来存放用户的用户名
 var image; //用来存放用户头像索引
 
 
@@ -22,6 +23,7 @@ function haveUser(ctx,next){
             });
             if(user.length==1){
                 nickname=user[0].nickname;
+                username=user[0].username;
                 image = user[0].image;
             }
             
@@ -80,7 +82,7 @@ function insertDataToUser(ctx,next){
             goodAtLanguage:goodAtLanguage,
             studyLanguage:studyLanguage,
             introduction: ctx.request.body.introduction,
-            image: Math.ceil(Math.random()*900)
+            image: (Math.ceil(Math.random()*900))%10
         });
         console.log('created: ' + JSON.stringify(user));
     })();
@@ -128,7 +130,8 @@ module.exports = {
         let user = {
             id: index,
             name: name,
-            image: image % 10
+            username: username,
+            image: image
         };
         let value = Buffer.from(JSON.stringify(user)).toString('base64');
         console.log(`Set cookie value: ${value}`);
