@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block main %}
+<!-- <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script> -->
 <link rel="stylesheet" href="/static/css/match.css">
 
 <center>
@@ -56,7 +57,7 @@
             list.push(user);
         }
         
-        function removeFromUserList(list, user) {
+        function removeFromUserList(list,user) {
             var i, target = -1;
             for (i=0; i<list.length; i++) {
                 if (list[i].id == user.id) {
@@ -68,6 +69,16 @@
             
                 list.splice(target, 1);
             }
+           
+            
+        }
+
+        function addMessage(list,show_list,msg) {
+            list.push(msg);
+            show_list.push(msg);
+            $('#message-list').parent().animate({
+                scrollTop: $('#message-list').height()
+            }, 1000);
         }
     
     
@@ -80,14 +91,50 @@
 
             //定义一个RTC对象
             var rtc = SkyRTC();
+            //定义一个VUE对象，用来发送和显示信息
+            var vmMessageList = new Vue({
+                el: '#message-list',
+                data: {
+                    title:"Room", //聊天框的名字，初始时为Room，当点击某个用户时，变为该用户的昵称
+                    messages: [], //用来存储所有的消息
+                    show_messages:[] //用来存储特定的要显示的消息。
+                },
+                methods: {
+                
+                    //初始化聊天框的名字与消息内容
+                    init: function (title) {
+                        //修改聊天框的名字
+                        this.title = title;
+                        //将message里的信息进行筛选，只显示与想聊天的人的消息
+                        this.show_messages=[];
+                        for(var i=0;i<this.messages.length;i++){
+                            if(this.messages[i].room_name == title){
+                                this.show_messages.push(this.messages[i]);
+                            }
+                        }
+                    },
+                    
+                    
+                }
+            });
             //定义一个VUE对象，用来存储当前在线用户
             var vmUserList = new Vue({
                 el: '#user-list',
                 data: {
-                    users: [],
-                    socket_ids:[]
+                    users: [],//存放所有在线用户
+                    // socket_ids:[]
+                },
+                
+                methods: {
+                    init: function (user) {
+                        console.log(user);
+                        user.unread=0;  
+                        vmMessageList.init(user.name);
+                    }
                 }
             });
+
+            
             //定义错误信息
             var errorCb = function(rtc) {
                     return function(error) {
@@ -102,7 +149,7 @@
                 console.log(my_socketId)
                 console.log(my_socketUser)
                 var room_name;
-            //发往后台，开始匹配
+                //发往后台，开始匹配
                 my_socket.send(JSON.stringify({
                     "eventName": "_match",
                     "data": {
@@ -113,7 +160,7 @@
                 }), errorCb);
 
                 rtc.on("get_roomname",function(room_name){
-                    console.log("到前端了")
+                    // console.log("到前端了")
                     console.log(room_name);
                     $("#confirm_button").click(function(){
                         console.log(room_name)
@@ -136,8 +183,13 @@
                 my_socketUser=socketUser;
 
                 vmUserList.users = users;
-                console.log("connected:",users)
-
+                //将所有用户的未读设置为0，当有未读信息时，设置为1。该字段用来表示是否有该用户发送给我的消息未读
+                for(var i = 0; i<vmUserList.users.length;i++){
+                    vmUserList.users[i].unread = 0;
+                }
+               
+                console.log("connected:",users);
+                // console.log(vmUserList.users);
             });
 
             //删除其他用户
@@ -153,26 +205,90 @@
             });
             //新用户加入
             rtc.on("new_peer",function(socketId,socketUser){
-                console.log(socketId);
-                console.log(socketUser)
+    
+                //将新加入用户的未读设置为0，当有未读信息时，设置为1.
+                socketUser.unread=0;
                 addToUserList(vmUserList.users, socketUser);
+                for(var i = 0; i<vmUserList.users.length;i++){
+                    console.log(isNaN(vmUserList.users[i].unread));
+                }
+                console.log('new_peer:users',vmUserList.users);
             })
 
+            //接收到其他用户的消息，参数为消息来源的user信息，socketId和内容
+            rtc.on("new_message",function(src_user,src_socketId,content){
+                
+                //将接收到的信息存储在messages中，当点开该对话框的时候在对show_messages进行赋值
+                var msg={
+                        user: src_user,
+                        room_name:src_user.name,
+                        data: content
+                };
+                vmMessageList.messages.push(msg);
+                //如果当前刚好在收到消息的页面，则将消息加入show_messages，以更新页面
+                if(vmMessageList.title==msg.room_name){
+                    vmMessageList.show_messages.push(msg);
+                }else{ // 否则给出提示
+                    for(var i=0;i<vmUserList.users.length;i++){
+                        //将来源的用户的unread+1
+                        if(vmUserList.users[i].name == msg.room_name){
+                            vmUserList.users[i].unread+=1;
+                        }
+                    }
+                    // console.log('在这里',vmUserList.users);
+                }
+
+            })
+
+            $('#form-chat').submit(function (e) {
+                e.preventDefault();
+                var input = $(this).find('input[type=text]');
+                var text = input.val().trim();
+               
+                if (text) {
+                    input.val('');
+
+                    var dst_socketId=-1;  //发送信息的目标
+                    for(var i = vmUserList.users.length-1;i>=0;i--){
+                        if(vmUserList.users[i].name==vmMessageList.title){
+                            dst_socketId = vmUserList.users[i].socketId;
+                            break;
+                        }
+                    }
+                    
+                    //如果不是发给自己，则进行消息转发，否则不做操作
+                    if(dst_socketId!=my_socketId){
+                        //发往后台,后台转发信息
+                        my_socket.send(JSON.stringify({
+                            "eventName": "_chat",
+                            "data": {
+                                "socketId": my_socketId,
+                                "dst_socketId":dst_socketId,
+                                "socketUser":my_socketUser,
+                                "content":text.trim()
+                            }
+                        }), errorCb);
+                    }
+                    //消息的格式
+                    //user表示是谁发出的
+                    //room_name表示是依附于哪个聊天框
+                    //data为聊天内容
+                    var msg={
+                            user: my_socketUser,
+                            room_name:vmMessageList.title,
+                            data: text.trim()
+                    };
+                   
+                    //用来存储所有消息的列表和用于显示的列表都要加入该消息
+                    addMessage(vmMessageList.messages,vmMessageList.show_messages, msg);
+                }
+            });
+        
             //连接WebSocket服务器
             rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
         });
     </script>
 
-    <script>
-        // 这里写与其他人聊天的逻辑代码
-    </script>
-
-    <script>
-        //这里写查看动态的逻辑代码
-        //加一个刷新按钮，每次点刷新，就重新从数据库里读数据，重新绑定数据
-
-
-    </script>
      
     <div class="container" style="position:fixed;left:0%;padding: 0px">
         <div class="row">
@@ -184,35 +300,73 @@
                     <div class="panel-body">
                         <div style="height:434px; overflow-x:hidden; overflow-y:scroll;">
                             <div id="user-list">
-                                <div class="media" v-for="user in users">
-                                    <div class="media-left">
+                                <div class="media" v-for="user in users" >
+                                    <div class="media-left" v-on:click="init(user)">
                                         <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/images/' + user.image + '.png'">
                                     </div>
-                                    <div class="media-body">
+
+                                    <div class="media-body" v-on:click="init(user)">
                                         <h4 class="media-heading" v-text="user.name"></h4>
-                                        <!-- <h4 class="media-heading" v-text="user"></h4> -->
                                     </div>
+
+                                    <div class="media-right" v-if="user.unread">
+                                        <span style="border-radius: 50%;    height: 20px;    width: 20px;    display: inline-block;    background: #238ff9;      vertical-align: top;">
+                                                <span style="display: block;    color: #FFFFFF;    height: 20px;    line-height: 20px;    text-align: center"> {% raw %}{{user.unread}}{% endraw %}</span>
+                                        </span>
+                                    </div>
+                                    <!-- <div class="media-right">
+                                        <span class='fa fa-hand-o-up' v-bind:style="{opacity: user.unread}"></span>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <audio id="recorded" preload="none"></audio>
-            <!-- <button type="button" class="btn btn-info" onclick="location.href='/test'">test</button> -->
+        
             <div class="col-md-8">
-                    <!-- 这里面是iframe，用来放与不同人的聊天页 -->
-                    <iframe name="chatPage" src="/chat" scrolling = 'no' frameborder="0" width="100%" height="550px">
+                <div id="message-list">
+                    <div class="panel panel-default">
                     
-                    </iframe>
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><span class="glyphicon glyphicon-th-list"></span> {% raw %}{{title}}{% endraw %} </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="height:400px; overflow-x:hidden; overflow-y:scroll;">
+                                
+                                <div style="margin-bottom:25px;" v-for="msg in show_messages">
+                                    
+                                    
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img class="media-object" style="width:48px; height:48px;" v-bind:src="'/static/images/' + msg.user.image + '.png'">
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading" v-text="msg.user.name"></h4>
+                                            <span v-text="msg.data"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    
+
+                                </div>
+                            
+                            </div>
+                            <div>
+                                <form id="form-chat" action="#0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="A good day, isn't it?">
+                                        <span class="input-group-btn"><button class="btn btn-default" type="submit">Go</button></span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </div>    
         
         
-    </div>
-    <div id="videos">
-        <video id="me" autoplay></video>
     </div>
 
 {% endblock %}

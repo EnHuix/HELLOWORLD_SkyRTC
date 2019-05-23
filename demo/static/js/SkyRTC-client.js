@@ -143,6 +143,9 @@ var SkyRTC = function() {
             // console.log("技术文件：",data.room_name);
             that.emit('get_roomname',data.room_name);
         });
+        this.on('_new_message',function(data){
+            that.emit('new_message',data.src_user,data.src_socketId,data.content);
+        });
 
         this.on("_ice_candidate", function(data) {
             var candidate = new nativeRTCIceCandidate(data);
