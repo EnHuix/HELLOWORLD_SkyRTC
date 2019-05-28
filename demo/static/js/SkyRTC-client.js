@@ -148,6 +148,8 @@ var SkyRTC = function() {
         });
 
         this.on("_ice_candidate", function(data) {
+            data.sdpMid=0;
+            data.sdpMLineIndex=0;
             var candidate = new nativeRTCIceCandidate(data);
             var pc = that.peerConnections[data.socketId];
             pc.addIceCandidate(candidate);
