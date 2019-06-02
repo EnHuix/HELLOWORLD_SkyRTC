@@ -13,13 +13,13 @@
     
     <!-- <center><h1>注册</h1></center> -->
     <h1>
-        <span>注册</span>
+        <p class="slogan">- Join HelloWorld -</p>
     </h1>    
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> Please Register</h3>
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> Please register </h3>
                 </div>
                 <div class="panel-body">
                     <form action="/register" method="post">
@@ -33,11 +33,11 @@
                             <input type="password" name="password" class="form-control" placeholder="Password" value="{{ password }}">
                         </div>
                         <div class="form-group">
-                            <label>NickName</label>
+                            <label>Nickname</label>
                             <input type="text" name="nickname" class="form-control" placeholder="NickName" value="{{ nickname }}">
                         </div>
                         <div class="form-group">
-                            <label>Birth</label>
+                            <label>Birthdate</label>
                             <input type="date"  class="form-control" name="birth" placeholder="Birth" value="{{ birth }}">
                         </div>
                         <div class="form-group">
@@ -53,19 +53,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Language You Good At</label>
+                            <label>I can use </label>
                             <div>
-                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="zh"> Chinese</label>
-                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="en"> English</label>
-                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="fr"> French</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="zh"> Chinese &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="en"> English &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="fr"> French &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="else"> else &nbsp;&nbsp;&nbsp;&nbsp;</label> 
+                                    <input type="text" style='width:150px; float:right' name="else_languages" class="form-control" placeholder="* please fill in" value="{{ else_languages }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Language 想学的</label>
+                            <label>I want to learn</label>
                             <div>
-                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="zh"> Chinese</label>
-                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="en"> English</label>
-                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="fr"> French</label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="zh"> Chinese &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="en"> English &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="fr"> French &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="else"> else &nbsp;&nbsp;&nbsp;&nbsp;</label> 
+                                    <input type="text" style='width:150px; float:right' name="else_languages" class="form-control" placeholder="* please fill in" value="{{ else_languages }}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -73,7 +77,7 @@
                             <textarea class="form-control" rows="3" style="resize: none;" name="introduction" placeholder="Your background, interests, etc." value="{{ introduction }}"></textarea>
                         </div>
 
-                        <center><button type="submit" class="btn btn-primary" onclick="alert('注册成功')">保存信息</button></center>
+                        <center><button type="submit" class="btn btn-primary" onclick="alert('注册成功')">Save</button></center>
                     </form>
                 </div>
             </div>
