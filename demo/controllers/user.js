@@ -50,8 +50,11 @@ function insertDataToUser(ctx,next){
    
     var goodAtLanguage="";
     var studyLanguage="";
+    var else_languages_goodat=ctx.request.body.else_languages_goodat;
+    var else_languages_study=ctx.request.body.else_languages_study;
 
     tmpLanguage=ctx.request.body.goodAtLanguage;
+    console.log(tmpLanguage);
     if(typeof tmpLanguage === 'string'){    //如果只选了一个，返回的则是string，否则返回object
         goodAtLanguage=tmpLanguage+";";
     }else{
@@ -59,6 +62,11 @@ function insertDataToUser(ctx,next){
             goodAtLanguage+=tmpLanguage[i];
             goodAtLanguage+=";";
         }
+    }
+    //如果用户填了其他擅长的语言，则把这个给加上
+    if(else_languages_goodat!=""){
+        goodAtLanguage+=else_languages_goodat;
+        goodAtLanguage+=";";
     }
    
     tmpLanguage=ctx.request.body.studyLanguage;
@@ -69,6 +77,11 @@ function insertDataToUser(ctx,next){
             studyLanguage+=tmpLanguage[i];
             studyLanguage+=";";
         }
+    }
+    //如果用户填了其他想学的语言，则把这个给加上
+    if(else_languages_study!=""){
+        studyLanguage+=else_languages_study;
+        studyLanguage+=";";
     }
     
    
