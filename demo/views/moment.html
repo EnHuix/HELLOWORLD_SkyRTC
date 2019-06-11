@@ -30,7 +30,7 @@ $(function () {
                 that.$resource('/moment/moments').get().then(function (resp) {
                     that.loading = false;
                     resp.json().then(function (result) {
-                        that.moments = result.moments.reverse();
+                        that.moments = result.moments;
                         console.log(that.moments)
                     });
                 }, function (resp) {

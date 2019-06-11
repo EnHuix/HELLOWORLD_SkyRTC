@@ -39,12 +39,15 @@ function get_moments(){
                     name: user[0].nickname,
                     image: user[0].image,
                     content: result[i].content.trim(),
-                    createdAt: getLocalTime(result[i].createdAt)
+                    createdAt: getLocalTime(result[i].createdAt),
+                    createdAt_timestamp:result[i].createdAt
                 }
                 
                 moments.push(moment);
             }
-            
+            moments.sort(function(moment1,moment2){
+                return moment2.createdAt_timestamp-moment1.createdAt_timestamp;
+            })
             resolve(result.length);
         })();  
     });
