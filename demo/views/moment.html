@@ -30,7 +30,7 @@ $(function () {
                 that.$resource('/moment/moments').get().then(function (resp) {
                     that.loading = false;
                     resp.json().then(function (result) {
-                        that.moments = result.moments;
+                        that.moments = result.moments.reverse();
                         console.log(that.moments)
                     });
                 }, function (resp) {
@@ -42,7 +42,9 @@ $(function () {
                 var that = this;
                 that.$resource('/moment/moments').save(moment).then(function (resp) {
                     resp.json().then(function (result) {
+                        that.moments.reverse();
                         that.moments.push(result);
+                        that.moments.reverse();
                     });
                 }, showError);
             },
