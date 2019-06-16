@@ -3342,21 +3342,19 @@ fieldset[disabled] .btn-warning.focus {
   background-color: #fff;
 }
 .btn-danger {
-  color: #fff;
-  padding: 183px 410px;
-  background-color: #d9534f;
-  border-color: #d43f3a;
+  
+  padding: 195px 473px;
+
+  background: url('../images/callon.png');
 }
 .btn-danger:focus,
 .btn-danger.focus {
-  color: #fff;
-  background-color: #c9302c;
-  border-color: #761c19;
+  background: url('../images/call.png');
+
 }
 .btn-danger:hover {
-  color: #fff;
-  background-color: #c9302c;
-  border-color: #ac2925;
+  background: url('../images/call.png');
+
 }
 .btn-danger:active,
 .btn-danger.active,

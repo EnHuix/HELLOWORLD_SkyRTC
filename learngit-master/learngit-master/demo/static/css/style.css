@@ -3,14 +3,14 @@ article, aside, audio, canvas, command, datalist, details, embed, figcaption, fi
 mark, rp, rt, ruby, summary, time {display:inline}
 /* Global properties */
 html {width:100%}
-body {font-family:Arial, Helvetica, sans-serif;font-size:100%;color:#9d9d9d;min-width:984px;background:url(../images/body.jpg) center 0 repeat}
+body {font-family:Arial, Helvetica, sans-serif;font-size:100%;color:#9d9d9d;min-width:984px;background:url(../images/newbg.jpg) center 0 no-repeat;background-size: cover;}
 .ic, .ic a {border:0;float:right;background:#fff;color:#f00;width:50%;line-height:10px;font-size:10px;margin:-220% 0 0 0;overflow:hidden;padding:0}
 a {color:#00a9ff;outline:none}
 a:hover {text-decoration:none}
 .col-1, .col-2, .col-3, .col-4  {float:left}
 .wrapper {width:100%;overflow:hidden}
 .extra-wrap {overflow:hidden}
-.bg {width:100%;background:url(../images/bg.jpg) center 0 no-repeat}
+.bg {width:100%;background:url(../images/newbg.jpg) center 0 no-repeat;}
 .main {width:984px;padding:0;margin:0 auto;font-size:0.875em;line-height:1.285em}
 p {margin-bottom:18px}
 .p0 {margin-bottom:0px}
@@ -53,12 +53,12 @@ p {margin-bottom:18px}
 .menu li a, .list-1 li a, .button-2, .logo {text-decoration:none}
 /* header */
 header {width:100%;margin-bottom:-16px;position:relative;z-index:1}
-.row-1 {width:100%;height:113px;overflow:hidden;padding-top:24px}
+.row-1 {width:100%;height:113px;overflow:hidden;padding-top:24px;background:rgba(255,255,255,0.4);border-radius: 4px}
 .row-2 {width:100%;min-height:85px;position:relative;z-index:1}
 .row-3 {width:100%;min-height:417px;position:relative;z-index:2}
 h1 {padding:0px 0 0 40px;position:relative;float:left}
 .logo {display:block;width:250px;height:45px;text-indent:-5000px;background:url(../images/helloworld.png) 0 0 no-repeat;margin:10px 0 8px 0}
-.slog {display:block;font-size:14px;line-height:1.2em;color:#8a8a8a;text-transform:uppercase;letter-spacing:-1px}
+.slog {display:block;font-size:14px;line-height:1.2em;color:#fff;text-transform:uppercase;letter-spacing:-1px}
 /* search-form */
 #search-form {width:244px;min-height:39px;padding:20px;margin-right:19px;background:#000;border-radius:18px;-moz-border-radius:18px;-webkit-border-radius:18px;float:right}
 .search-form {background:#fefefe;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;width:100%;overflow:hidden}
@@ -92,7 +92,7 @@ h1 {padding:0px 0 0 40px;position:relative;float:left}
 h2 {font-size:39px;line-height:1.9em;color:#0f0f0f;margin-bottom:5px;letter-spacing:-2px}
 h3 {font-size:30px;line-height:1.3em;margin-top:-5px;letter-spacing:-2px}
 h3 strong {display:block;color:#fefefe;margin-bottom:-11px}
-h4 {font-size:23px;line-height:1.2em;color:#fefefe;letter-spacing:-1px;margin-bottom:20px}
+h4 {font-size:23px;line-height:1.2em;color:#000;letter-spacing:-1px;margin-bottom:20px}
 h5 {color:#0f0f0f;text-decoration:underline;font-weight:normal}
 h6 {color:#0f0f0f;font-weight:normal;margin-bottom:5px}
 .border-bot {width:100%;padding-bottom:20px;background:url(../images/pic-1.gif) 0 bottom repeat-x}
@@ -125,7 +125,7 @@ h6 {color:#0f0f0f;font-weight:normal;margin-bottom:5px}
 .link-1:hover {color:#fff} 
 .text-1 {line-height:20px;margin:0} 
 dl.address {line-height:24px;color:#9d9d9d}
-dl.address span {float:left;width:74px;color:#fefefe}
+dl.address span {float:left;width:74px;color:#000}
 dl.contact {line-height:20px;color:#9d9d9d}
 dl.contact span {display:block;color:#0f0f0f}
 dl.contact dt, dl.contact dd {margin-bottom:5px}
@@ -142,7 +142,7 @@ dl.contact dt, dl.contact dd {margin-bottom:5px}
 .buttons a {margin-left:6px;padding:9px 25px 11px}
 /* footer */
 footer {width:100%;}
-.row-top {width:100%;padding:33px 0 42px;background:#000}
+.row-top {width:100%;padding:33px 0 42px;background:rgba(255,255,255,0.5)}
 .row-padding {padding:0 62px}
 .row-bot {width:100%;padding:35px 0;font-size:12px;line-height:20px}
 .list-services li {line-height:24px;padding-left:28px}
