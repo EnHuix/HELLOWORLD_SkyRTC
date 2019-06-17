@@ -1,0 +1,310 @@
+/*-- ================= LIGHT - Color Scheme ================= --*/
+
+/*-- 
+AUTHOR   : Hitesh Jariwala
+TEMPLATE : Avail Creative Coming Soon Template
+VERSION  : 1.0
+
+TABLE OF CONTENTS
+1.0 TYPOGRAPHY
+2.0 PRELOADERS
+3.0 SECTIONS
+	3.1 HOME SECTION
+	3.2 ABOUT SECTION
+	3.3 WORKS SECTION	
+	3.4 CONTACT SECTION
+4.0 COUNTDOWN
+5.0 MENU 
+6.0 LOGO
+7.0 SUBSCRIBE POPUP
+8.0 FORMS
+9.0 SOCIAL MEDIA LINKS
+10.0 STYLE FOR TABLET PORTRAIT
+--*/
+
+/*-- ============ 1.0 TYPOGRAPHY ============ --*/
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6,
+p.quote
+{
+	color:#262626;
+}
+p,
+.basic-text
+{
+	color:#636363;
+}
+p.separator-line::before{
+	background:#262626;
+}
+ 
+
+/*-- ============ 2.0 PRELOADERS ============ --*/ 
+.preloader-container{
+	background:white;
+}
+.preloader-container .preloader-text{
+	color:#262626;
+}
+.pulse-loader{
+	border:4px solid #262626;
+}
+@-moz-keyframes pulse-loader {
+	0% {
+    	-moz-box-shadow: #dadada 0 0 0px 0px;
+    	     box-shadow: #dadada 0 0 0px 0px;
+  	}
+  	100% {
+  	  	-moz-box-shadow: #dadada 0 0 0px 10px;
+    	     box-shadow: #dadada 0 0 0px 10px;
+  	}
+}
+@-webkit-keyframes pulse-loader {
+  	0% {
+   	 	-webkit-box-shadow: #dadada 0 0 0px 0px;
+    	        box-shadow: #dadada 0 0 0px 0px;
+  	}
+  	100% {
+    	-webkit-box-shadow: #dadada 0 0 0px 10px;
+    	        box-shadow: #dadada 0 0 0px 10px;
+  	}
+}
+@keyframes pulse-loader {
+  	0% {
+    	-webkit-box-shadow: #dadada 0 0 0px 0px;
+	 	   -moz-box-shadow: #dadada 0 0 0px 0px;
+    	        box-shadow: #dadada 0 0 0px 0px;
+  	}
+  	100% {
+    	-webkit-box-shadow: #dadada 0 0 0px 10px;
+		   -moz-box-shadow: #dadada 0 0 0px 10px;
+    	        box-shadow: #dadada 0 0 0px 10px;
+  	}
+}
+
+/*-- ============ 3.0 SECTIONS ============ --*/
+section .half-overlay{
+	background:rgba(255,255,255,0);
+}
+section .half-overlay.is-visible{
+	background:rgba(255,255,255,0.5);
+}
+
+/*-- 3.1 HOME SECTION --*/
+.home-section .bg-container::before{
+	background:rgba(255,255,255,0.6);
+}
+.home-section .right-side .text-container,
+.home-section .right-side .text-container a,
+.home-section .desc
+{
+	color:#262626;
+}
+.home-section .right-side .text-container a::after,
+.home-section .right-side .text-container a:hover::after
+{
+	background:#e71d36;
+}
+.home-section .right-side .text-container a{
+	color:#e71d36;
+}
+
+/*-- 3.2 ABOUT SECTION --*/
+.about-section .bg-container-static::before{
+	background:rgba(255,255,255,0.7);
+}
+.about-section .services-container::before{
+	background:#262626;
+}
+.about-section .service .icon-container::before{
+	border:2px solid #262626;
+}
+.about-section .service:hover .icon-container::before{
+	border:2px solid #e71d36;
+}
+.about-section .service .icon-container .icon{
+	color:#262626;
+}
+.about-section .service:hover .icon-container .icon{
+	color:#e71d36;
+}
+.owl-theme .owl-controls .owl-page span{
+	background:#262626;
+}
+.owl-theme .owl-controls .owl-page.active span,
+.owl-theme .owl-controls.clickable .owl-page:hover span{
+	background:#e71d36;
+}
+
+/*-- 3.3 WORKS SECTION --*/
+.works-section .bg-container-static::before{
+	background:rgba(255,255,255,0.7);
+}
+.works-section .works-container .img-container::before{
+	background:rgba(255,255,255,0.3);
+}
+.works-section .works-container .work:hover .img-container::before{
+	background:rgba(255,255,255,0.7);
+}
+.works-section .works-container .img-container .icon-link::before{
+	border:2px solid #262626;
+}
+.works-section .works-container .img-container .icon-link:hover::before{
+	border:2px solid #e71d36;
+}
+.works-section .works-container .img-container .icon-link .icon{
+	color:#262626;
+}
+.works-section .works-container .img-container .icon-link:hover .icon{
+	color:#e71d36;
+}
+.works-section .works-container .text-container::before{
+	background:#262626;
+}
+.works-section .works-container .text-container h6{
+	color:#e71d36;
+}
+
+/*-- 3.4 CONTACT SECTION --*/
+.contact-section .bg-container-static::before{
+	background:rgba(255,255,255,0.7);
+}
+.contact-section .details::before,
+.contact-section .contact-form-container::before
+{
+	background:#262626;
+}
+
+
+/*-- ============ 4.0 COUNTDOWN ============ --*/
+.countdown-container::before,
+.countdown-container::after
+{
+	background:#262626;
+}
+.countdown-container .digit,
+.countdown-container .digit > div,
+.countdown-container .dash_title
+{
+	color:#262626;
+}
+.countdown-container .dash{background: url("../img/triangle_dark.png") no-repeat;}
+
+/*-- ============ 5.0 MENU ============ --*/
+nav ul li .icon-container::before{
+	border:2px solid #262626;
+}
+nav ul li a:hover .icon-container::before,
+nav ul li a.active .icon-container::before
+{
+	border:2px solid #e71d36;
+}
+nav ul li .icon-container .icon,
+nav ul li .text
+{
+	color:#262626;
+}
+nav ul li a:hover .icon-container .icon,
+nav ul li a:hover .text,
+nav ul li a.active .icon-container .icon,
+nav ul li a.active .text
+{
+	color:#e71d36;
+}
+
+nav.small-device{
+	background:rgba(38,38,38,0.9);
+}
+nav.small-device ul li .icon-container .icon{
+	color:white;
+}
+nav.small-device .menu-button-phone::before{
+	border:2px solid white;
+}
+nav.small-device .menu-button-phone:hover::before{
+	border:2px solid #e71d36;
+}
+nav.small-device .menu-button-phone .icon{
+	color:white;
+}
+nav.small-device .menu-button-phone:hover .icon,
+nav.small-device .nav-title
+{
+	color:#e71d36;
+}
+nav.small-device ul li{
+	border-bottom:1px solid #323232;
+	background:rgba(38,38,38,1);
+}
+nav.small-device ul li .text{
+	color:white;
+}
+
+
+/*-- ============ 6.0 LOGO ============ --*/
+.img-logo.small-device{
+	display:none;
+}
+
+/*-- ============ 7.0 SUBSCRIBE POPUP ============ --*/
+.subscribe-popup{
+	background:rgba(38,38,38,0.9);
+	border:4px solid white;
+}
+.subscribe-popup .close-button::before{
+	border:2px solid white;
+}
+.subscribe-popup .close-button:hover::before{
+	border:2px solid #e71d36;
+}
+.subscribe-popup .close-button:hover .icon{
+	color:#e71d36;
+}
+
+/*-- ============ 8.0 FORMS ============ --*/
+form.contact-form input[type="text"],
+form.contact-form input[type="email"],
+form.contact-form textarea,
+form.contact-form label
+{
+	color:#262626;
+}
+form .input-border-bottom{
+	background:#e71d36;
+}
+form.contact-form .input-container{
+	border-bottom:2px solid #262626;
+}
+
+/*-- ============ 9.0 SOCIAL MEDIA LINKS ============ --*/
+a.social-media{
+	color:#262626;
+	border:2px solid #262626;
+}
+a.social-media::before{
+	background:#e71d36;
+}
+a.social-media:hover{
+	color:white;
+}
+
+
+/*-- ===================================================== --*
+	10.0 STYLE FOR TABLET PORTRAIT 
+/*-- ===================================================== --*/
+@media all and (max-width: 991px){
+	.img-logo.small-device{
+		display:block;
+	}
+	.img-logo.large-device{
+		display:none;
+	}
+	
+	.home-section .bg-container::before{
+		background:rgba(255,255,255,0.7);
+	}
+}

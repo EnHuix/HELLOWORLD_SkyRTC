@@ -151,7 +151,7 @@ module.exports = {
         ctx.cookies.set('name', value);
        
         if(success){
-            ctx.render('homepage.html',{
+            ctx.render('index.html',{
                     title:"首页"
                     // user:user
             });
