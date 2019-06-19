@@ -222,9 +222,9 @@ p.separator-line1::before{
 .img-logo{
 	position:absolute;
 	display:block;
-	left:60px;
+	left:40px;
 	top:30px;
-	height:60px;
+	height:150px;
 	width:auto;
 	z-index:6;
 	-webkit-transition:all 0.5s ease 1500ms; 
@@ -234,8 +234,8 @@ p.separator-line1::before{
 	        transition:all 0.5s ease 1500ms;
 	-webkit-transform:translateY(-50px);
 	   -moz-transform:translateY(-50px);
-	    -ms-transform:translateY(-50px);
 	     -o-transform:translateY(-50px);
+	    -ms-transform:translateY(-50px);
 	        transform:translateY(-50px);
 	opacity:0;
 }

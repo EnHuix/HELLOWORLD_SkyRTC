@@ -1,7 +1,7 @@
 
 var config = {
     dialect: 'mysql',
-    database: 'nodejs',
+    database: 'hello',
     username: 'root',
     password: '',
     host: 'localhost',
