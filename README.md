@@ -1,5 +1,8 @@
 # HELLOWORLD
-步骤
+
+** 最终版查看final分支 **
+
+### 步骤
 1. 小组成员先把SSH Key添加到GitHub
 2. 克隆到本地，`git clone git@github.com:EnHuix/HELLOWORLD_SkyRTC.git`
 3. 使用命令行进入demo文件夹下，输入`npm install`
