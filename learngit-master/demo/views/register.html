@@ -1,0 +1,136 @@
+{% extends "base.html" %} {% block main %}
+<style>
+       
+    body{
+        background-image:url('/static/img/bg2.jfif');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size:cover
+    }
+</style>
+<section id="getintouch" class="bounceIn animated">
+<div class="container">
+    
+    <!-- <center><h1>注册</h1></center> -->
+    <h1>
+        <p class="slogan">- Join HelloWorld -</p>
+    </h1>    
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> Please register </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="/register" method="post">
+                        <div class="form-group">
+                            <label>UserName</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="UserName" value="{{ username }}">
+                            <span id="messageUserName" class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password" value="{{ password }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Nickname</label>
+                            <input type="text" name="nickname" class="form-control" placeholder="NickName" value="{{ nickname }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Birthdate</label>
+                            <input type="date"  class="form-control" name="birth" placeholder="Birth" value="{{ birth }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=1 > <span class="fa fa-mars"></span></label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=0> <span class="fa fa-venus"></span></label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="gender" value=-1> Keep Secret</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>I can use </label>
+                            <div>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="Chinese"> Chinese &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="English"> English &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="goodAtLanguage" value="French"> French &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="" value="else" id="goodat_else"> else &nbsp;&nbsp;&nbsp;&nbsp;</label> 
+                                    <input type="text" id="else_languages_goodat"style='width:150px; float:right;' name="else_languages_goodat" class="form-control" placeholder="* please fill in" value="{{ else_languages }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>I want to learn</label>
+                            <div>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="Chinese"> Chinese &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="English"> English &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="studyLanguage" value="French"> French &nbsp;&nbsp;&nbsp;&nbsp;   </label>
+                                <label class="checkbox-inline"><input type="checkbox" name="" value="else" id="study_else"> else &nbsp;&nbsp;&nbsp;&nbsp;</label> 
+                                    <input type="text" id="else_languages_study" style='width:150px; float:right;' name="else_languages_study" class="form-control" placeholder="* please fill in" value="{{ else_languages }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Introduce Yourself:</label>
+                            <textarea class="form-control" rows="3" style="resize: none;" name="introduction" placeholder="Your background, interests, etc." value="{{ introduction }}"></textarea>
+                        </div>
+
+                        <center><button type="submit" class="btn btn-primary" onclick="alert('注册成功')">Save</button></center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+</section>
+
+
+
+<script>
+//检测用户名是否可用
+$(function(){
+    $('#else_languages_goodat').fadeOut();
+    $('#else_languages_study').fadeOut();
+    $("#username").change(function(){
+        var val=$(this).val();
+        val=$.trim(val);
+        if(val.length<6){
+            $('#messageUserName').text("*用户名长度应大于6");
+            $('#messageUserName').css('color', '#CD5C5C')
+            return;
+        }
+            
+        if(val !=""){
+            $.ajax({
+                type: 'POST',
+                url: '/checkRegister',
+                dataType: 'json',
+                data: {
+                    username:val
+                }
+            })
+        }
+    
+    });
+    $('#goodat_else').click(function(){
+        $('#else_languages_goodat').fadeToggle();
+    });
+    $('#study_else').click(function(){
+        $('#else_languages_study').fadeToggle();
+    })
+});
+$(document).ajaxComplete(function(event, xhr, settings) {
+    var obj = JSON.parse(xhr.responseText);
+    var data = obj.data;
+    if(obj.success){
+        $('#messageUserName').css('color', '#228B22')
+    } else {
+        $('#messageUserName').css('color', '#CD5C5C')
+    }
+    $('#messageUserName').text(data);
+});
+</script>
+{% endblock %}

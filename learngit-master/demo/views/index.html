@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- meta -->
+    <meta charset="utf-8">
+    <!-- title -->
+    <title>Hello World</title>
+    <!-- CSS IMPORT -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/myStyle.css">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/match.css">
+    
+    <!-- <link rel="stylesheet" href="/static/css/font-awesome.css"> -->
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/js/jquery.ffform.js"></script>
+    <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <!-- bootstrap -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <!-- other plugins -->
+    <script type="text/javascript" src="/static/js/plugins.min.js"></script>
+    <!-- google map -->
+    <!-- main js -->
+    <script type="text/javascript" src="/static/js/main_slideshow.js"></script>
+</head>
+<body>
+    <!-- preloader -->
+    <div class="preloader-container">
+        <div class="content-container">
+            <!-- preloader -->
+            <span class="spinner-section-far"></span>
+            <!-- end preloader -->
+            <h6 class="preloader-text">
+                LOADING</h6>
+        </div>
+    </div>
+    <!-- end preloader -->
+   
+   
+    <!-- logo -->
+    <img class="img-logo" alt="logo" src="/static/img/helloworldlogo.png" />
+    <!-- end logo -->
+    <div id="light" class="white_content"> 
+            <!-- <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点这里关闭本窗口</a> -->
+            <div class="king">
+                <div class="player-layout">
+                    <div class="group group1">
+                    <div class="player1 player"></div>
+                    </div>
+                    <div class="group group2">
+                    <div class="player2 player"></div>
+                    </div>
+                    <div class="center"><img src="static/img/1.png"></div>
+                </div>
+                <div class="matrix">
+                    <div class="border border1"></div>
+                    <div class="border border2"></div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div id="confirm_button"class="button" >
+                    <div class="button-text">确认</div>
+                </div>
+                </div>
+            </div>
+    <div id="fade" class="black_overlay"></div>
+   
+    <!-- menu -->
+     <div class="open">
+        <div class="cls">
+        </div>
+        <div>
+            <ul class="sub-menu-t">
+                <li class="active"><a class="menu-link" data-section="home" data-nav-title="home"
+                    data-section-pos="0" data-section-posy="0">Home <i class="fa fa-fw fa-home"></i>
+                </a></li>
+                <li><a class="menu-link" data-section="works" data-nav-title="works" data-section-pos="-100"
+                    data-section-posy="-100">广场 <i class="fa fa-fw fa-list"></i></a></li>
+                <li><a href = "javascript:void(0)" id="match_button"onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">
+                    匹配通话<i class="fa fa-fw fa-phone"></i></a></li>
+                <li><a class="menu-link" data-section="about" data-nav-title="about" data-section-pos="0"
+                    data-section-posy="-100">About Us <i class="fa fa-fw fa-star-o"></i></a></li>
+               
+            </ul>
+        </div>
+        <div class="cls">
+        </div>
+    </div>
+    <!-- end menu  -->
+
+    <!-- page container -->
+    <div class="page-container">
+        <!-- section container -->
+        <div class="section-container">
+
+            <!-- 聊天的部分 -->
+            <!-- home section -->
+            <section class="home-section">
+        	    	<!-- section background -->
+        	    	<div class="bg-container"></div>
+                    <!-- end section background -->
+                    <div class="content col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-12 col-xs-rlt no-pad centering-y">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default" style="background-color:rgba(0,0,0,0.2)"> 
+                                    <div class="panel-heading"style="background-color:rgba(192,192,192,0.3)">
+                                        <h6 ><span class="glyphicon glyphicon-user"></span> Users</h6>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div style="height:434px; overflow-x:hidden; overflow-y:scroll;">
+                                            <div id="user-list">
+                                                <div class="media" v-for="user in users" >
+                                                    <div class="media-left" v-on:click="init(user)">
+                                                        <img class="media-object" style="width:20px; height:20px;" v-bind:src="'/static/img/' + user.image + '.png'">
+                                                    </div>
+                
+                                                    <div class="media-body" v-on:click="init(user)">
+                                                        <h6 class="media-heading" v-text="user.name"></h6>
+                                                    </div>
+                
+                                                    <div class="media-right" v-if="user.unread">
+                                                        <span style="border-radius: 50%;    height: 20px;    width: 20px;    display: inline-block;    background: #238ff9;      vertical-align: top;">
+                                                                <span style="display: block;    color: #FFFFFF;    height: 20px;    line-height: 20px;    text-align: center"> {% raw %}{{user.unread}}{% endraw %}</span>
+                                                        </span>
+                                                    </div>
+                                                    <!-- <div class="media-right">
+                                                        <span class='fa fa-hand-o-up' v-bind:style="{opacity: user.unread}"></span>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-8">
+                                <div id="message-list">
+                                    <div class="panel panel-default" style="background-color:rgba(0,0,0,0.2)">
+                                    
+                                        <div class="panel-heading" style="background-color:rgba(192,192,192,0.3)">
+                                            <h6 ><span class="glyphicon glyphicon-th-list"></span> {% raw %}{{title}}{% endraw %} </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div style="height:400px; overflow-x:hidden; overflow-y:scroll;">
+                                                
+                                                <div style="margin-bottom:25px;" v-for="msg in show_messages">
+                                                    
+                                                    
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <img class="media-object" style="width:48px; height:48px;" v-bind:src="'/static/img/' + msg.user.image + '.png'">
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h6 v-text="msg.user.name"></h6>
+                                                            <p class="desc" style="margin: 0px 0px;"v-text="msg.data"></p>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                
+                                                </div>
+                                            
+                                            </div>
+                                            <div>
+                                                <form id="form-chat" action="#0">
+                                                    <div class="input-group">   
+                                                        <input type="text" class="form-control"  style="color: #FFFFFF" placeholder="A good day, isn't it?" >
+                                                        <span class="input-group-btn"><button class="btn button-green" type="submit">Go</button></span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+                </section>
+            <!-- end home section -->
+           
+            
+            <!-- 动态的部分 -->
+            <!-- service section -->          
+            <section class="works-section">
+        	    	<!-- section background -->
+        	    	<div class="bg-container-static"></div>
+                	<!-- end section background -->
+                	<!-- content -->                	
+                    <div class="content col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-12 col-xs-rlt no-pad centering-y">
+                           
+                       
+                        <div class="row">
+                            <div class="col-md-11">	    	
+                                <div class="panel panel-default" style="background-color:rgba(0,0,0,0.2)">
+                                    <div class="panel-heading" style="background-color:rgba(192,192,192,0.2)">
+                                        <h6 ><span class="glyphicon glyphicon-plus"></span> Add New Moment</h6>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form id="vmAdd" action="#0" v-on:submit.prevent="submit">
+                                            <div class="form-group">
+                                                <label>Content:</label>
+                                                <input type="text" style="color:#FFFFFF"v-model="content" class="form-control" placeholder="分享新鲜事">
+                                            </div>
+                                            <button type="submit" class="btn button-green">发送</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                            <div id='vmFresh'>
+                                    <i v-on:click="refresh" class="fa fa-refresh fa-4x" style="color: #fff"></i>
+                                     <!-- <button >刷新</button> -->
+                                 </div>
+                                 </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default" style="background-color:rgba(0,0,0,0.2)">
+                                    <div class="panel-heading" style="background-color:rgba(192,192,192,0.2)">
+                                        <h6 ><span class="glyphicon glyphicon-th-list"></span> 动态内容 
+                                            
+                                        </h6>
+                                    </div>
+                                    <div class="panel-body" style="height:434px; overflow-x:hidden; overflow-y:scroll;">
+                                        <div id="vm">
+                                                <!-- <h3>{{ title }}</h3> -->
+                                                <p v-if="loading">Loading...</p>
+
+                                                <div class="media" v-for="t in moments">
+                                                    <div class="media-left">
+                                                        <img class="media-object" style="width:32px; height:32px;" v-bind:src="'/static/img/' + t.image + '.png'">
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 >{% raw %}{{ t.name }}{% endraw %}</h6>
+                                                        <p class="desc">{% raw %}{{ t.createdAt }}{% endraw %}</p>
+                                                        <p class="desc" style="margin: 0px 0px;">{% raw %}{{ t.content }}{% endraw %}</p>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+					</div>
+
+                         
+
+                	
+                	<!-- end content -->
+            	</section>
+            <!-- end works section -->
+
+            
+            <!-- 关于我们的部分 -->
+            <!-- about section -->
+            <section class="about-section">
+        	    	<!-- section background -->
+        	    	<div class="bg-container-static"></div>
+                	<!-- end section background -->            
+                	<!-- content -->
+                	<div class="content col-md-8 col-md-offset-2 col-sm-12 col-sm-rlt col-xs-12 no-pad centering-y">
+                       
+                        <!-- about us -->
+                    	<div class="col-md-4 col-sm-12">
+                                <!-- office -->
+                                <div class="details">
+                                    <h5>office</h5>
+                                    <p>CUC <br />BigData2016</p>
+                                </div>
+                                <!-- end office -->
+                        
+                                <!-- 小组成员 -->
+                                <div class="details">
+                                    <h5>Contact Us</h5>
+                                    <p><a href="https://github.com/Enhuix" target="_blank" style="color:#fff">Enhuix</a></p>
+                                    <p><a href="https://github.com/Lola1999" target="_blank"style="color:#fff"> Lola1999</a></p>
+                                    <p><a href="https://github.com/MichelleWang7" target="_blank" style="color:#fff">MichelleWang7</a></p>
+                                    <p><a href="https://github.com/kingjyh" target="_blank" style="color:#fff">kingjyh</a></p>
+                                </div>
+                                <!-- end 小组成员 -->
+                                
+                       
+                                <!-- 项目地址 -->
+                                <div class="details">
+                                    <h5>Project Details</h5>
+                                    <div class="social-media-container">
+                                        <a class="social-media" href="https://github.com/EnHuix/learngit" target="_blank"><i class="fa fa-github"></i></a>
+                                       
+                                    </div>
+                                </div>
+                                <!-- end 项目地址 -->
+                            </div>
+                        <!-- about us结束 -->
+
+                        <!-- 项目描述 -->
+                        <div class="col-md-8 col-sm-12">
+                           
+                        	<div class="desc">
+                    	    	<!-- quote -->
+                            	<p class="quote separator-line">
+                        	    	什么是Hello World：
+                            	</p>
+                            	<!-- end quote -->
+                        
+                            	<p >
+                        	    	Hello World是一个为那些正在学习语言的用户提供交流的平台。
+                                </p>
+                                <br>
+                                <p class="quote separator-line">
+                                    为什么做Hello World：
+                                </p>
+                                <p>在我们学习语言的时候，口语的练习是一个难题。</p>
+                                <p>我们生活的地方大多不能够提供良好的学习语言的环境</p>
+                                <p>因此Hello World致力于搭建语言交流平台，为那些需要练习口语，甚至是需要学习语言的用户提供服务和帮助。</p>
+                                <br>
+                                <p class="quote separator-line">
+                                        我们是谁？
+                                </p>
+                                <p>来自CUC的一个软工小组~组里大佬应有尽有！</p>
+    
+                        	</div>
+                        	<!-- end company description -->
+                        </div>    
+                        <!-- 项目描述结束 -->    
+          	
+                	</div>
+                	<!-- end content -->
+            	</section>
+            <!-- end about section -->
+            
+
+             <!-- 空白页 -->
+             <section class="contact-section">
+        	    	<!-- section background -->
+        	    	<div class="bg-container-static"></div>
+            	</section>
+            <!-- 空白页 -->
+
+            
+
+        </div>
+        <!-- end section container -->
+    </div>
+ 
+
+</body>
+</html>
+
+<script type="text/javascript" src="static/js/SkyRTC-client.js"></script>  
+
+<!-- 聊天的相关代码 -->
+<script>
+    var videos = document.getElementById("videos");
+    function addToUserList(list, user) {
+        var i;
+        for (i=0; i<list.length; i++) {
+        
+            if (list[i].id === user.id) {
+                return;
+            }
+        }
+        list.push(user);
+    }
+    
+    function removeFromUserList(list,user) {
+        var i, target = -1;
+        for (i=0; i<list.length; i++) {
+            if (list[i].id == user.id) {
+                target = i;
+                break;
+            }
+        }
+        if (target >= 0) {
+        
+            list.splice(target, 1);
+        }
+       
+        
+    }
+
+    function addMessage(list,show_list,msg) {
+        list.push(msg);
+        show_list.push(msg);
+        $('#message-list').parent().animate({
+            scrollTop: $('#message-list').height()
+        }, 1000);
+    }
+
+
+    $(function () {    
+        //用来存储信息，即自己的socket,socketId和个人信息socketUser，在匹配的时候发往后台，用作匹配
+        //my_socket用来发送消息给服务器
+        var my_socket;
+        var my_socketId;
+        var my_socketUser;
+
+        //定义一个RTC对象
+        var rtc = SkyRTC();
+        //定义一个VUE对象，用来发送和显示信息
+        var vmMessageList = new Vue({
+            el: '#message-list',
+            data: {
+                title:"Room", //聊天框的名字，初始时为Room，当点击某个用户时，变为该用户的昵称
+                messages: [], //用来存储所有的消息
+                show_messages:[] //用来存储特定的要显示的消息。
+            },
+            methods: {
+            
+                //初始化聊天框的名字与消息内容
+                init: function (title) {
+                    //修改聊天框的名字
+                    this.title = title;
+                    //将message里的信息进行筛选，只显示与想聊天的人的消息
+                    this.show_messages=[];
+                    for(var i=0;i<this.messages.length;i++){
+                        if(this.messages[i].room_name == title){
+                            this.show_messages.push(this.messages[i]);
+                        }
+                    }
+                },
+                
+                
+            }
+        });
+        //定义一个VUE对象，用来存储当前在线用户
+        var vmUserList = new Vue({
+            el: '#user-list',
+            data: {
+                users: [],//存放所有在线用户
+                // socket_ids:[]
+            },
+            
+            methods: {
+                init: function (user) {
+                    console.log(user);
+                    user.unread=0;  
+                    vmMessageList.init(user.name);
+                }
+            }
+        });
+
+        
+        //定义错误信息
+        var errorCb = function(rtc) {
+                return function(error) {
+                    if (error) {
+                        rtc.emit("error", error);
+                    }
+                };
+        };
+
+        $("#match_button").click(function(){
+            console.log(my_socket);
+            console.log(my_socketId)
+            console.log(my_socketUser)
+            var room_name;
+            //发往后台，开始匹配
+            my_socket.send(JSON.stringify({
+                "eventName": "_match",
+                "data": {
+                    // "socket":my_socket,
+                    "socketId": my_socketId,
+                    "socketUser":my_socketUser
+                }
+            }), errorCb);
+
+            rtc.on("get_roomname",function(room_name){
+                console.log("到前端了")
+                console.log(room_name);
+                $("#confirm_button").click(function(){
+                    console.log(room_name)
+                    document.getElementById('light').style.display='none';
+                    document.getElementById('fade').style.display='none';
+                    window.open("talk#"+room_name,"_blank");
+                })
+                
+            })
+        
+            
+        }) 
+
+        /**********************************************************/
+        //成功创建WebSocket连接
+        rtc.on("connected", function(socket,socketId,socketUser,users) {
+            // 初始化个人信息
+            my_socket=socket;
+            my_socketId=socketId;
+            my_socketUser=socketUser;
+
+            vmUserList.users = users;
+            //将所有用户的未读设置为0，当有未读信息时，设置为1。该字段用来表示是否有该用户发送给我的消息未读
+            for(var i = 0; i<vmUserList.users.length;i++){
+                vmUserList.users[i].unread = 0;
+            }
+           
+            console.log("connected:",users);
+            // console.log(vmUserList.users);
+        });
+
+        //删除其他用户
+        rtc.on('remove_peer', function(socketId,socketUser) {
+            // console.log(socketId)
+            console.log("删除用户",socketUser)
+            var video = document.getElementById('other-' + socketId);
+            if(video){
+                video.parentNode.removeChild(video);
+            }
+
+            removeFromUserList(vmUserList.users,socketUser)
+        });
+        //新用户加入
+        rtc.on("new_peer",function(socketId,socketUser){
+
+            //将新加入用户的未读设置为0，当有未读信息时，设置为1.
+            socketUser.unread=0;
+            addToUserList(vmUserList.users, socketUser);
+            for(var i = 0; i<vmUserList.users.length;i++){
+                console.log(isNaN(vmUserList.users[i].unread));
+            }
+            console.log('new_peer:users',vmUserList.users);
+        })
+
+        //接收到其他用户的消息，参数为消息来源的user信息，socketId和内容
+        rtc.on("new_message",function(src_user,src_socketId,content){
+            
+            //将接收到的信息存储在messages中，当点开该对话框的时候在对show_messages进行赋值
+            var msg={
+                    user: src_user,
+                    room_name:src_user.name,
+                    data: content
+            };
+            vmMessageList.messages.push(msg);
+            //如果当前刚好在收到消息的页面，则将消息加入show_messages，以更新页面
+            if(vmMessageList.title==msg.room_name){
+                vmMessageList.show_messages.push(msg);
+            }else{ // 否则给出提示
+                for(var i=0;i<vmUserList.users.length;i++){
+                    //将来源的用户的unread+1
+                    if(vmUserList.users[i].name == msg.room_name){
+                        vmUserList.users[i].unread+=1;
+                    }
+                }
+                // console.log('在这里',vmUserList.users);
+            }
+
+        })
+
+        $('#form-chat').submit(function (e) {
+            e.preventDefault();
+            var input = $(this).find('input[type=text]');
+            var text = input.val().trim();
+           
+            if (text) {
+                input.val('');
+
+                var dst_socketId=-1;  //发送信息的目标
+                for(var i = vmUserList.users.length-1;i>=0;i--){
+                    if(vmUserList.users[i].name==vmMessageList.title){
+                        dst_socketId = vmUserList.users[i].socketId;
+                        break;
+                    }
+                }
+                
+                //如果不是发给自己，则进行消息转发，否则不做操作
+                if(dst_socketId!=my_socketId){
+                    //发往后台,后台转发信息
+                    my_socket.send(JSON.stringify({
+                        "eventName": "_chat",
+                        "data": {
+                            "socketId": my_socketId,
+                            "dst_socketId":dst_socketId,
+                            "socketUser":my_socketUser,
+                            "content":text.trim()
+                        }
+                    }), errorCb);
+                }
+                //消息的格式
+                //user表示是谁发出的
+                //room_name表示是依附于哪个聊天框
+                //data为聊天内容
+                var msg={
+                        user: my_socketUser,
+                        room_name:vmMessageList.title,
+                        data: text.trim()
+                };
+               
+                //用来存储所有消息的列表和用于显示的列表都要加入该消息
+                addMessage(vmMessageList.messages,vmMessageList.show_messages, msg);
+            }
+        });
+    
+        //连接WebSocket服务器
+        rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+    });
+</script>
+
+
+
+<!-- 动态的相关代码 -->
+<script>
+
+    function showError(resp) {
+        resp.json().then(function (result) {
+            console.log('Error: ' + result.message);
+        });
+    }
+    
+    $(function () {
+        var vm = new Vue({
+            el: '#vm',
+            // http: {
+            //     timeout: 5000
+            // },
+            data: {
+                title: 'TODO List',
+                moments: [],
+                loading: false
+            },
+            created: function () {
+                this.init();
+                
+            },
+            methods: {
+                init: function () {
+                    var that = this;
+                    that.loading = true;
+                    that.$resource('/moment/moments').get().then(function (resp) {
+                        that.loading = false;
+                        resp.json().then(function (result) {
+                            that.moments = result.moments;
+                            console.log(that.moments)
+                        });
+                    }, function (resp) {
+                        that.loading = false;
+                        showError(resp);
+                    });
+                },
+                create: function (moment) {
+                    var that = this;
+                    that.$resource('/moment/moments').save(moment).then(function (resp) {
+                        resp.json().then(function (result) {
+                            that.moments.reverse();
+                            that.moments.push(result);
+                            that.moments.reverse();
+                        });
+                    }, showError);
+                },
+                update: function (moment, prop, e) {
+                    var that = this;
+                    var t = {
+                        name: moment.name,
+                        content: moment.content
+                    };
+                    t[prop] = e.target.innerText;
+                    if (t[prop] === moment[prop]) {
+                        return;
+                    }
+                    that.$resource('/moment/moments/' + moment.id).update(t).then(function (resp) {
+                        resp.json().then(function (r) {
+                            moment.name = r.name;
+                            moment.content = r.content;
+                        });
+                    }, function (resp) {
+                        e.target.innerText = moment[prop];
+                        showError(resp);
+                    });
+                },
+                remove: function (moment) {
+                    var that = this;
+                    that.$resource('/moment/moments/' + moment.id).delete().then(function (resp) {
+                        var i, index = -1;
+                        for (i=0; i<that.moments.length; i++) {
+                            if (that.moments[i].id === moment.id) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index >= 0) {
+                            that.moments.splice(index, 1);
+                        }
+                    }, showError);
+                }
+            }
+        });
+        window.vm = vm;
+    
+        var vmAdd = new Vue({
+            el: '#vmAdd',
+            data: {
+                // name: '',
+                content: ''
+            },
+            methods: {
+                submit: function () {
+                    vm.create(this.$data);
+                    // this.name = '';
+                    this.content = '';
+                },
+            }
+        });
+
+        var vmFresh = new Vue({
+            el:"#vmFresh",
+            methods:{
+                refresh:function(){
+                    vm.init();
+                }
+            }
+        })
+
+    });
+    
+</script>
