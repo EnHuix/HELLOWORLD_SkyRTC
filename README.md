@@ -1,6 +1,6 @@
 # HELLOWORLD
 
-** 最终版查看final分支 **
+**最终版查看final分支**
 
 ### 步骤
 1. 小组成员先把SSH Key添加到GitHub
