@@ -1,3 +1,5 @@
 *.js linguist-language=Javascript
 *.css linguist-language=Javascript
 *.html linguist-language=Javascript
+*.png linguist-language=Javascript
+*.pdf linguist-language=Javascript
