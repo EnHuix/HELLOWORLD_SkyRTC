@@ -25,7 +25,7 @@
         "mz": "2.4.0",
         "node-uuid": ">= 1.4.1",
         "nunjucks": "2.4.2",
-        "sequelize": "3.24.1",
+        "sequelize": "5.15.1",
         "skyrtc": ">= 0.0.0",
         "ws": "1.1.1"
     }
